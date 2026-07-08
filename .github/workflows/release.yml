@@ -37,18 +37,9 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease
 
-      - name: Import GPG key
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-
-      - name: Sign APK with GPG
-        run: |
-          gpg --batch --yes --detach-sign --armor app/build/outputs/apk/release/app-release.apk
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             app/build/outputs/apk/release/app-release.apk
-            app/build/outputs/apk/release/app-release.apk.asc
           generate_release_notes: true
